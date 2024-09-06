@@ -1,3 +1,4 @@
+
 import {create} from 'zustand';
 
 export const useProductStore = create((set) => ({
@@ -12,9 +13,10 @@ export const useProductStore = create((set) => ({
             headers: {
                 "content-Type" : "application/json"
             },
-            body:JSON.stringfy(newProduct)
+            body:JSON.stringify(newProduct)
         } )
         const data = await res.json();
         set((state) => ({products: {...state.products, data}}))
+        return {success: true, message: "Product created successfully"}
     }
 }))
