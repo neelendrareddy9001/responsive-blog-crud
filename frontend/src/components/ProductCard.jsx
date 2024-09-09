@@ -1,10 +1,11 @@
 import { DeleteIcon, EditIcon } from "@chakra-ui/icons"
-import { Box, Heading, HStack, IconButton, Image, Text, useColorModeValue, useToast } from "@chakra-ui/react"
+import { Box, Button, Heading, HStack, IconButton, Image, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, useColorModeValue, useDisclosure, useToast, VStack } from "@chakra-ui/react"
 import { useProductStore } from "../store/product";
 
 const ProductCard = (product) => {
     const textColor = useColorModeValue("gray.600", "gray.200")
     const bg = useColorModeValue("white", "gray.800");
+    const {isOpen, onOpen, onClose} = useDisclosure();
     const {deleteProduct} = useProductStore();
     const toast  =useToast();
 
@@ -46,9 +47,31 @@ const ProductCard = (product) => {
             ${product.price}
         </Text>
         <HStack spacing={2}>
-            <IconButton icon={<EditIcon />} colorScheme="blue" />
+            <IconButton icon={<EditIcon />} onOpen={onOpen} colorScheme="blue" />
             <IconButton icon={<DeleteIcon />} onClick={() => {handleDeleteProduct(product._id)}} colorScheme="red" />
         </HStack>
+        <Modal isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader>Update Product</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                    <VStack spacing={4}>
+                        <Input placeholder="Product Name" name="name" />
+                        <Input placeholder="Price" name="price" type="number" />
+                        <Input placeholder="Image URL" name="image" />
+                    </VStack>
+                </ModalBody>
+                <ModalFooter>
+                    <Button colorScheme="blue" mr={3}>
+                        Update
+                    </Button>
+                    <Button variant='ghost' onClick={onClose}>
+                        Cancel
+                    </Button>
+                </ModalFooter>
+            </ModalContent>
+        </Modal>
     </Box>
   )
 }
